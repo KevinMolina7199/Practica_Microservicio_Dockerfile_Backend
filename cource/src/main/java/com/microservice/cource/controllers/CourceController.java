@@ -22,37 +22,39 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 
 @RestController
-@RequestMapping("api/cource/")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/api/cource/")  // Agregada barra al final
+@CrossOrigin(origins = "http://34.30.217.33:4200")
 public class CourceController {
 
-	@Autowired
-	public CourceService couService;
+    @Autowired
+    private CourceService couService;
 
-	@PostMapping("/save")
-	private ResponseEntity<Cource> save(@RequestBody Cource cou) {
-		Cource temporal = couService.create(cou);
+    @PostMapping("/save")
+    public ResponseEntity<Cource> saveCource(@RequestBody Cource cou) {
+        Cource savedCource = couService.create(cou);
+        return ResponseEntity.ok(savedCource);
+    }
 
-		return ResponseEntity.ok(temporal);
-	}
-
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Map<String, String>> deleteCource(@PathVariable("id") Long id) {
-		Map<String, String> result = couService.deleteCource(id);
-		if (result.containsKey("Mensaje") && result.get("Mensaje").equals("Curso eliminado exitosamente")) {
+    @DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteCource(@PathVariable String id) {
+		String result = couService.deleteCource(id);
+		if (result.equals("Curso eliminado exitosamente")) {
 			return ResponseEntity.ok(result);
 		} else {
 			return ResponseEntity.badRequest().body(result);
 		}
 	}
 
-	@GetMapping("/allList")
-	private ResponseEntity<List<Cource>> allList() {
-		return ResponseEntity.ok(couService.listCource());
-	}
-
-	@GetMapping("curso/{id}")
-	private ResponseEntity<Optional<Cource>> user(@PathVariable("id") Long id) {
+	@GetMapping("/curso/{id}")
+	public ResponseEntity<Optional<Cource>> getCourceById(@PathVariable String id) {
 		return ResponseEntity.ok(couService.findById(id));
 	}
+
+
+    @GetMapping("/allList")
+    public ResponseEntity<List<Cource>> getAllCources() {
+        return ResponseEntity.ok(couService.listCource());
+    }
+
 }
+

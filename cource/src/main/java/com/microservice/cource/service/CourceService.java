@@ -14,30 +14,29 @@ import com.microservice.cource.repository.CourceRepository;
 @Service
 public class CourceService {
 
-	@Autowired
-	private CourceRepository couRepository;
+    @Autowired
+    private CourceRepository couRepository;
 
-	public List<Cource> listCource() {
-		return couRepository.findAll();
-	}
+    public List<Cource> listCource() {
+        return couRepository.findAll();
+    }
 
-	public Cource create(Cource cource) {
-		return couRepository.save(cource);
-	}
+    public Cource create(Cource cource) {
+        return couRepository.save(cource);
+    }
 
-	public Map<String, String> deleteCource(Long courceId) {
-		Map<String, String> result = new HashMap<>();
-		Optional<Cource> userOptional = couRepository.findById(courceId);
-
-		if (userOptional.isPresent()) {
+    public String deleteCource(String courceId) {
+		Optional<Cource> courceOptional = couRepository.findById(courceId);
+		if (courceOptional.isPresent()) {
 			couRepository.deleteById(courceId);
+			return "Curso eliminado exitosamente";
+		} else {
+			return "Error: Curso no encontrado";
 		}
-
-		return result;
 	}
-
-	public Optional<Cource> findById(Long id) {
+	
+	public Optional<Cource> findById(String id) {
 		return couRepository.findById(id);
 	}
-
+	
 }
